@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="http://webapplayers.com/inspinia_admin-v2.9.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="http://webapplayers.com/inspinia_admin-v2.9.2/css/style.css" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: white;
+        }
+
+        /*the container must be positioned relative:*/
+
+        .autocomplete {
+            position: relative;
+            display: inline-block;
+        }
+
+        input {
+            border: 1px solid transparent;
+            background-color: #f1f1f1;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        input[type=text] {
+            background-color: #f1f1f1;
+            width: 100%;
+        }
+
+        input[type=submit] {
+            background-color: DodgerBlue;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .autocomplete-items {
+            border: 1px solid #d4d4d4;
+            border-bottom: none;
+            border-top: none;
+            z-index: 99;
+            /*position the autocomplete items to be the same width as the container:*/
+            top: 100%;
+            left: 0;
+            right: 0;
+        }
+
+        .autocomplete-items div {
+            padding: 10px;
+            cursor: pointer;
+            background-color: #fff;
+            border-bottom: 1px solid #d4d4d4;
+        }
+
+        /*when hovering an item:*/
+
+        .autocomplete-items div:hover {
+            background-color: #e9e9e9;
+        }
+
+        /*when navigating through the items using the arrow keys:*/
+
+        .autocomplete-active {
+            background-color: DodgerBlue !important;
+            color: #ffffff;
+        }
+
+        [contenteditable=true]:empty:not(:focus):before {
+            content: attr(data-text);
+            color: gray;
+        }
+
+        .autocomplete {
+            width: 96%;
+        }
+
+        .autocomplete-items {
+            height: 160px;
+            overflow-x: scroll;
+        }
+
+        .textarea {
+            height: 60px;
+        }
+
+        .gotoProfile {
+            background-color: #dce6f8;
+            font-weight: 500;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper wrapper-content  animated fadeInRight">
+        <div class="row">
+
+            <div class="col-lg-12">
+                <div class="social-feed-box">
+                    <div class="social-avatar">
+                        <a href="" class="float-left">
+                            <img alt="image" src="http://webapplayers.com/inspinia_admin-v2.9.2/img/a1.jpg">
+                        </a>
+                        <div class="media-body">
+                            <a href="#">
+                                Andrew Williams
+                            </a>
+                            <small class="text-muted">Today 4:21 pm - 12.06.2014</small>
+                        </div>
+                    </div>
+                    <div class="social-body">
+                        <p>
+                            Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem
+                            ipsum' will uncover many web sites still in their infancy. Packages and web page editors now
+                            use Lorem Ipsum as their default model text.
+                        </p>
+
+                        <div class="btn-group">
+                            <button class="btn btn-white btn-xs">
+                                <i class="fa fa-thumbs-up"></i> Like this!</button>
+                            <button class="btn btn-white btn-xs">
+                                <i class="fa fa-comments"></i> Comment</button>
+                            <button class="btn btn-white btn-xs">
+                                <i class="fa fa-share"></i> Share</button>
+                        </div>
+                    </div>
+                    <div class="social-footer">
+                        <div class="social-comment">
+                            <a href="" class="float-left">
+                                <img alt="image" src="http://webapplayers.com/inspinia_admin-v2.9.2/img/a1.jpg">
+                            </a>
+                            <div class="media-body">
+                                <a href="#">
+                                    Andrew Williams
+                                </a>
+                                Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary
+                                of over 200 Latin words.
+                                <br/>
+                                <a href="#" class="small">
+                                    <i class="fa fa-thumbs-up"></i> 26 Like this!</a> -
+                                <small class="text-muted">12.06.2014</small>
+                            </div>
+                        </div>
+
+                        <div class="social-comment">
+                            <a href="" class="float-left">
+                                <img alt="image" src="http://webapplayers.com/inspinia_admin-v2.9.2/img/a2.jpg">
+                            </a>
+                            <div class="media-body">
+                                <a href="#">
+                                    Andrew Williams
+                                </a>
+                                Making this the first true generator on the Internet. It uses a dictionary of.
+                                <br/>
+                                <a href="#" class="small">
+                                    <i class="fa fa-thumbs-up"></i> 11 Like this!</a> -
+                                <small class="text-muted">10.07.2014</small>
+                            </div>
+                        </div>
+
+                        <div class="social-comment">
+                            <a href="" class="float-left">
+                                <img alt="image" src="http://webapplayers.com/inspinia_admin-v2.9.2/img/a3.jpg">
+                            </a>
+                            <div class="media-body autocomplete">
+                                <div id="element" class="form-control textarea" contenteditable="true" data-text="Write comment..." onclick="mentionKeyup(this)"></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var namesArray = [
+            {
+                "uuid": "e819b7cc-8101-4777-b7a1-ccd29bce6311",
+                "lastName": "Antonellis",
+                "firstName": "Andrea",
+                "photoUrl": "http://webapplayers.com/inspinia_admin-v2.9.2/img/a2.jpg"
+            },
+            {
+                "uuid": "03825acb-e1e1-49a7-8991-0ea87de7138e",
+                "lastName": "Baravalle",
+                "firstName": "Andrea",
+                "photoUrl": "http://webapplayers.com/inspinia_admin-v2.9.2/img/a1.jpg"
+            },
+            {
+                "uuid": "6140a2aa-f10c-4dca-acba-cf6bcf79527b",
+                "lastName": "Caravello",
+                "firstName": "Andrea",
+                "photoUrl": "http://webapplayers.com/inspinia_admin-v2.9.2/img/a3.jpg"
+            },
+            {
+                "uuid": "4f672f79-769f-4cea-b428-f1d7db1d408a",
+                "lastName": "Cigalla",
+                "firstName": "Andrea",
+                "photoUrl": "http://webapplayers.com/inspinia_admin-v2.9.2/img/a4.jpg"
+            },
+            {
+                "uuid": "112c8d0a-7bd0-45ae-a11e-0be09160b3ee",
+                "lastName": "Garofalo",
+                "firstName": "Andrea ",
+                "photoUrl": "http://webapplayers.com/inspinia_admin-v2.9.2/img/a5.jpg"
+            },
+            {
+                "uuid": "bacf2c7a-1d96-4e3c-bdcb-60c6b357b561",
+                "lastName": "Garulli",
+                "firstName": "Andrea",
+                "photoUrl": "http://webapplayers.com/inspinia_admin-v2.9.2/img/a7.jpg"
+            },
+            {
+                "uuid": "1eac901d-857e-4771-a9a3-2f7d2883662d",
+                "lastName": "Lagomarsini",
+                "firstName": "Andrea",
+                "photoUrl": "http://webapplayers.com/inspinia_admin-v2.9.2/img/a8.jpg"
+            },
+            {
+                "uuid": "b3ffad61-0329-4299-93e4-d2d611cc4122",
+                "lastName": "Lazzari",
+                "firstName": "Andrea",
+                "photoUrl": "http://webapplayers.com/inspinia_admin-v2.9.2/img/a6.jpg"
+            },
+            {
+                "uuid": "8e4be04a-af00-4b1c-b908-d8606a6c3267",
+                "lastName": "Recchia",
+                "firstName": "Andrea",
+                "photoUrl": "http://webapplayers.com/inspinia_admin-v2.9.2/img/a5.jpg"
+            },
+            {
+                "uuid": "ac8e8846-b7b7-45d6-ad85-cb87ef7628bd",
+                "lastName": "Di Gregorio",
+                "firstName": "Angela ",
+                "photoUrl": "http://webapplayers.com/inspinia_admin-v2.9.2/img/a6.jpg"
+            },
+            {
+                "uuid": "56a72933-4f06-4f56-b0dc-6c03e791551e",
+                "lastName": "Pescarolo",
+                "firstName": "Angela",
+                "photoUrl": "http://webapplayers.com/inspinia_admin-v2.9.2/img/a1.jpg"
+            },
+            {
+                "uuid": "07eec007-bf85-43f0-b13e-21f90e51d3bb",
+                "lastName": "Rondinone",
+                "firstName": "Angela",
+                "photoUrl": "http://webapplayers.com/inspinia_admin-v2.9.2/img/a2.jpg"
+            },
+            {
+                "uuid": "e1e03409-6907-4ef4-aba0-e4f45f7a67e0",
+                "lastName": "Piampiani",
+                "firstName": "Angelica",
+                "photoUrl": "http://webapplayers.com/inspinia_admin-v2.9.2/img/a3.jpg"
+            },
+            {
+                "uuid": "6f6f289c-7d33-4507-9b66-d906e32bd4ba",
+                "lastName": "Daniele ",
+                "firstName": "Anna",
+                "photoUrl": "http://webapplayers.com/inspinia_admin-v2.9.2/img/a2.jpg"
+            },
+            {
+                "uuid": "9e7696bb-1d0a-4fe7-ba6a-9c673730e8fd",
+                "lastName": "D'Urso",
+                "firstName": "Anna",
+                "photoUrl": "http://webapplayers.com/inspinia_admin-v2.9.2/img/a1.jpg"
+            }
+        ]
+
+        function autocomplete(inp, arr, element) {
+            /*the autocomplete function takes two arguments,
+            the text field element and an array of possible autocompleted values:*/
+            var currentFocus;
+            var valuewithat;
+            /*execute a function when someone writes in the text field:*/
+            inp.addEventListener("input", function (e) {
+                var text = $(element).html();
+                var cursorPos = window.getSelection().anchorOffset;
+
+                if (text.includes("@")) {
+                    var valuesub = window.getSelection().anchorNode.data;
+                    var valueindex = valuesub.lastIndexOf('@');
+                    var mentiion = window.getSelection().anchorNode.data.substring(valueindex + 1, cursorPos);
+                    valueName = mentiion;
+                    valuewithat = true;
+                } else {
+                    valueName = "";
+                    valuewithat = false;
+                }
+                textarevaluecomment = $(element).html();
+
+                var a, b, i, val = valueName;
+
+                /*close any already open lists of autocompleted values*/
+                closeAllLists();
+                if (!val) { return false; }
+                currentFocus = -1;
+                /*create a DIV element that will contain the items (values):*/
+                a = document.createElement("DIV");
+                a.setAttribute("id", this.id + "autocomplete-list");
+                a.setAttribute("class", "autocomplete-items");
+                /*append the DIV element as a child of the autocomplete container:*/
+                this.parentNode.appendChild(a);
+                /*for each item in the array...*/
+                for (i = 0; i < arr.length; i++) {
+                    /*check if the item starts with the same letters as the text field value:*/
+                    var firstna = arr[i].firstName.toUpperCase() + " " + arr[i].lastName.toUpperCase();
+
+                    if (firstna.includes(valueName.trim().toUpperCase())) {
+                        var nameofSearch = arr[i].firstName + " " + arr[i].lastName;
+                        b = document.createElement("DIV");
+                        b.setAttribute("class", "take " + arr[i].uuid);
+                        b.setAttribute("id", arr[i].uuid);
+
+                        b.innerHTML += "<img src='" + arr[i].photoUrl + "' class='img-search' id='" + "img-search" + "'>";
+                        b.innerHTML += " " + nameofSearch;
+                        b.innerHTML += "<input type='hidden' value='" + nameofSearch + "' id='" + arr[i].uuid + "'>";
+
+                        b.addEventListener("click", function (e) {
+                            $(element).html($(element).html().replace("@" + valueName, "<b class='gotoProfile' contenteditable='false'>" + this.getElementsByTagName("input")[0].value + "</b>&nbsp;"));
+                            textarevaluecomment = $(element).html();
+
+                            commentReplyVal = $(element).html();
+                            $(element).focus();
+                            // select all the content in the element
+                            document.execCommand('selectAll', false, null);
+                            // collapse selection to the end
+                            document.getSelection().collapseToEnd();
+                            closeAllLists();
+                        });
+                        a.appendChild(b);
+                    }
+                }
+            });
+            /*execute a function presses a key on the keyboard:*/
+            inp.addEventListener("keydown", function (e) {
+                var x = document.getElementById(this.id + "autocomplete-list");
+                if (x) x = x.getElementsByTagName("div");
+                if (e.keyCode == 40) {
+                    /*If the arrow DOWN key is pressed,
+                    increase the currentFocus variable:*/
+                    currentFocus++;
+                    /*and and make the current item more visible:*/
+                    addActive(x);
+                } else if (e.keyCode == 38) { //up
+                    /*If the arrow UP key is pressed,
+                    decrease the currentFocus variable:*/
+                    currentFocus--;
+                    /*and and make the current item more visible:*/
+                    addActive(x);
+                } else if (e.keyCode == 13) {
+                    /*If the ENTER key is pressed, prevent the form from being submitted,*/
+                    if (valuewithat) {
+                        e.preventDefault();
+                    }
+                    if (currentFocus > -1) {
+                        /*and simulate a click on the "active" item:*/
+                        if (x) x[currentFocus].click();
+                    }
+                }
+            });
+            function addActive(x) {
+                /*a function to classify an item as "active":*/
+                if (!x) return false;
+                /*start by removing the "active" class on all items:*/
+                removeActive(x);
+                if (currentFocus >= x.length) currentFocus = 0;
+                if (currentFocus < 0) currentFocus = (x.length - 1);
+                /*add class "autocomplete-active":*/
+                x[currentFocus].classList.add("autocomplete-active");
+            }
+            function removeActive(x) {
+                /*a function to remove the "active" class from all autocomplete items:*/
+                for (var i = 0; i < x.length; i++) {
+                    x[i].classList.remove("autocomplete-active");
+                }
+            }
+            function closeAllLists(elmnt) {
+                /*close all autocomplete lists in the document,
+                except the one passed as an argument:*/
+                var x = document.getElementsByClassName("autocomplete-items");
+                for (var i = 0; i < x.length; i++) {
+                    if (elmnt != x[i] && elmnt != inp) {
+                        x[i].parentNode.removeChild(x[i]);
+                    }
+                }
+            }
+            /*execute a function when someone clicks in the document:*/
+            document.addEventListener("click", function (e) {
+                closeAllLists(e.target);
+            });
+        }
+
+        function mentionKeyup(element) {
+            autocomplete(document.getElementById(element.id), namesArray, element);
+        }
+    </script>
+    <!-- Mainly scripts -->
+    <script src="http://webapplayers.com/inspinia_admin-v2.9.2/js/jquery-3.1.1.min.js"></script>
+    <script src="http://webapplayers.com/inspinia_admin-v2.9.2/js/bootstrap.js"></script>
+
+</html>
